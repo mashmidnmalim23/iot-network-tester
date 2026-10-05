@@ -1,0 +1,120 @@
+<!DOCTYPE html>                 <!-- מצהיר על מסמך HTML5 -->
+<html lang="he" dir="rtl">      <!-- שורש, עברית, מימין לשמאל -->
+<head>
+  <meta charset="UTF-8">        <!-- קידוד עברית -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- רספונסיבי -->
+  <title>מה הפרויקט עושה – IoT Network Tester</title>  <!-- כותרת הלשונית -->
+  <link rel="stylesheet" href="style.css">            <!-- העיצוב המשותף -->
+</head>
+<body>
+
+  <!-- ====== סרגל ניווט (זהה בכל הדפים; משתנה רק ה-active) ====== -->
+  <nav class="navbar">
+    <!-- הלוגו בצד ימין -->
+    <div class="logo"><span class="dot"></span> IoT Network Tester</div>
+    <!-- הקישורים לכל הדפים. class="active" מסמן את הדף הנוכחי -->
+    <div class="links">
+      <a href="overview.html" class="active">מה הפרויקט עושה</a> <!-- דף נוכחי -->
+      <a href="topology.html">טופולוגיה</a>
+      <a href="specs.html">תקינות ומפרט</a>
+      <a href="components.html">רכיבים</a>
+      <a href="login.html">יציאה</a>  <!-- "יציאה" מחזיר למסך ההתחברות -->
+    </div>
+  </nav>
+
+  <!-- ====== תוכן הדף ====== -->
+  <div class="container">
+
+    <h1 class="page-title">מה הפרויקט עושה?</h1>  <!-- כותרת ראשית -->
+    <!-- תקציר – מהתקציר (Executive Summary) שבמסמך האפיון -->
+    <p class="page-subtitle">
+      כלי פיזי ייעודי מבוסס בקר ESP32 לביצוע ניטור, סריקת רשתות,
+      מיפוי טופולוגיה ובדיקות עומס בסביבות ארגוניות.
+    </p>
+
+    <!-- כרטיס תיאור כללי (Project Overview) -->
+    <div class="card">
+      <h2>תיאור כללי</h2>
+      <p>
+        המערכת היא כלי חומרה קטן ("Drop-Box") שמחברים לרשת ארגונית ומבצע
+        בדיקות אבטחה ותקינות: סריקת פורטים, זיהוי רכיבים ומיפוי הרשת,
+        ובדיקות עומס מבוקרות. המכשיר מתוכנת בשפת ++C/C ומדווח בזמן אמת
+        לפלטפורמת Firebase, ושומר גיבוי מקומי של הממצאים במסד נתונים SQL
+        לצורך הפקת דוחות (Forensics).
+      </p>
+    </div>
+
+    <!-- כרטיס תכונות המערכת (System Features) – רשת של כרטיסים קטנים -->
+    <h2 class="page-title" style="font-size:1.4rem; margin-top:10px;">תכונות מרכזיות</h2>
+
+    <!-- .grid = מסדר את הכרטיסים הקטנים בעמודות אוטומטיות -->
+    <div class="grid">
+
+      <!-- תכונה 1 -->
+      <div class="card">
+        <h2>סריקת רשת ופורטים</h2>
+        <p>מיפוי אוטומטי וזיהוי רכיבים חיוניים ברשת, איתור כתובות IP
+           ופורטים פתוחים לצורך בדיקת תקלות ובעיות ברשת.</p>
+        <span class="badge info">Port &amp; Network Scanning</span> <!-- &amp; = התו & -->
+      </div>
+
+      <!-- תכונה 2 -->
+      <div class="card">
+        <h2>מיפוי טופולוגיה</h2>
+        <p>יצירת תמונת רשת מלאה – אילו רכיבים קיימים וכיצד הם מחוברים
+           זה לזה, להצגה ויזואלית של הארגון.</p>
+        <span class="badge info">Topology Mapping</span>
+      </div>
+
+      <!-- תכונה 3 -->
+      <div class="card">
+        <h2>בדיקות עומס</h2>
+        <p>בדיקת עמידות הרשת בעזרת UDP/TCP Flooding – מדידת זמני תגובה
+           (Latency) ואיבוד חבילות (Packet Loss) תחת עומס.</p>
+        <span class="badge warn">Stress Testing</span>
+      </div>
+
+      <!-- תכונה 4 -->
+      <div class="card">
+        <h2>שליטה בזמן אמת</h2>
+        <p>שליחת פקודות וקבלת תוצאות בזמן אמת דרך Firebase – ניתן להפעיל
+           את המכשיר ולראות ממצאים מרחוק.</p>
+        <span class="badge info">Real-Time C&amp;C</span>
+      </div>
+
+      <!-- תכונה 5 -->
+      <div class="card">
+        <h2>הגנה עצמית</h2>
+        <p>המכשיר פועל בצורה שקטה (Stealth) ומזהה פתיחה/טלטול פיזי של
+           הקופסה (Anti-Tamper) כדי למנוע חשיפה.</p>
+        <span class="badge warn">Anti-Tamper &amp; Stealth</span>
+      </div>
+
+      <!-- תכונה 6 -->
+      <div class="card">
+        <h2>עבודה במצב Offline</h2>
+        <p>במידה והרשת מנותקת, המכשיר שומר את הממצאים מקומית בכרטיס SD
+           וממשיך לפעול – ומסנכרן כשהחיבור חוזר.</p>
+        <span class="badge ok">Offline Buffering</span>
+      </div>
+
+    </div> <!-- סוף ה-grid -->
+
+    <!-- כרטיס טכנולוגיות (Tech Stack) -->
+    <div class="card">
+      <h2>ארכיטקטורה טכנולוגית (Tech Stack)</h2>
+      <ul>
+        <li><b>שפת פיתוח:</b> ++C / C (ב-Arduino IDE או VS Code עם PlatformIO)</li>
+        <li><b>פרוטוקולי תקשורת:</b> SPI (ל-SD ולמודול הרשת), I2C ואנלוגי (לחיישנים)</li>
+        <li><b>ענן (זמן אמת):</b> ספריית Firebase-ESP-Client + Firebase Realtime Database</li>
+        <li><b>מסד נתונים:</b> SQL לשמירת ממצאים והפקת דוחות (Forensics)</li>
+      </ul>
+    </div>
+
+  </div> <!-- סוף container -->
+
+  <!-- כותרת תחתונה -->
+  <div class="footer">IoT Network Tester · מסמך אפיון פרויקט (PRD) · גרסה 1.0</div>
+
+</body>
+</html>

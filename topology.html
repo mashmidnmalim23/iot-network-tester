@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>טופולוגיה – IoT Network Tester</title>
+  <link rel="stylesheet" href="style.css">   <!-- העיצוב המשותף -->
+
+  <!-- עיצובים ייחודיים לדיאגרמת הטופולוגיה -->
+  <style>
+    /* .diagram = האזור שבו מצוירת כל הרשת */
+    .diagram {
+      display: flex;            /* flexbox */
+      flex-direction: column;   /* מסדר את השכבות אחת מתחת לשנייה */
+      align-items: center;      /* ממרכז כל שכבה אופקית */
+      gap: 0;                   /* בלי רווח – הקווים ידאגו לריווח */
+      padding: 10px 0;          /* ריווח קל למעלה/למטה */
+    }
+
+    /* .node = "קופסה" של רכיב בדיאגרמה */
+    .node {
+      background: var(--panel);          /* רקע כהה */
+      border: 2px solid var(--border);   /* מסגרת */
+      border-radius: 12px;               /* פינות מעוגלות */
+      padding: 12px 18px;                /* ריווח פנימי */
+      text-align: center;                /* טקסט ממורכז */
+      min-width: 150px;                  /* רוחב מינימלי אחיד */
+    }
+    /* שם הרכיב (שורה עליונה בקופסה) */
+    .node .name { font-weight: bold; color: var(--text); }
+    /* תיאור קטן מתחת לשם */
+    .node .sub  { font-size: 0.8rem; color: var(--muted); }
+
+    /* צבעי מסגרת לפי סוג רכיב – עוזר להבדיל ויזואלית */
+    .node.power   { border-color: var(--accent-2); }  /* חשמל – ירוק */
+    .node.mcu     { border-color: var(--accent); background:#13233f; } /* הבקר – תכלת ומודגש */
+    .node.net     { border-color: #a78bfa; }          /* רשת – סגול */
+    .node.sensor  { border-color: #f59e0b; }          /* חיישנים – כתום */
+    .node.cloud   { border-color: var(--accent); }    /* ענן – תכלת */
+
+    /* .connector = קו אנכי קצר שמחבר בין שכבות */
+    .connector {
+      width: 2px;                 /* קו דק */
+      height: 28px;               /* אורך הקו */
+      background: var(--border);  /* צבע הקו */
+    }
+
+    /* .layer = שורה אופקית של כמה nodes (למשל כל החיישנים ביחד) */
+    .layer {
+      display: flex;          /* בשורה */
+      flex-wrap: wrap;        /* יורד שורה במסך צר */
+      gap: 16px;              /* רווח בין הקופסאות */
+      justify-content: center;/* ממרכז */
+    }
+
+    /* תווית קטנה על קו (שם הפרוטוקול, למשל SPI) */
+    .proto {
+      font-size: 0.72rem;        /* קטן */
+      color: var(--accent);      /* תכלת */
+      background: var(--panel-2);/* רקע כהה קטן */
+      padding: 1px 8px;          /* ריווח */
+      border-radius: 999px;      /* גלולה */
+      border: 1px solid var(--border);
+    }
+
+    /* מקרא הצבעים (legend) */
+    .legend {
+      display: flex; flex-wrap: wrap; gap: 14px;  /* פריטים בשורה */
+      justify-content: center;                    /* ממורכז */
+      margin-top: 8px;
+    }
+    .legend span { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--muted); }
+    /* ריבוע צבע קטן במקרא */
+    .legend i { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  </style>
+</head>
+<body>
+
+  <!-- סרגל ניווט -->
+  <nav class="navbar">
+    <div class="logo"><span class="dot"></span> IoT Network Tester</div>
+    <div class="links">
+      <a href="overview.html">מה הפרויקט עושה</a>
+      <a href="topology.html" class="active">טופולוגיה</a>  <!-- דף נוכחי -->
+      <a href="specs.html">תקינות ומפרט</a>
+      <a href="components.html">רכיבים</a>
+      <a href="login.html">יציאה</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <h1 class="page-title">טופולוגיית המערכת</h1>
+    <p class="page-subtitle">
+      כיצד הרכיבים מחוברים: ממקור המתח, דרך הבקר המרכזי, אל הרשת והענן.
+    </p>
+
+    <!-- כרטיס שעוטף את כל הדיאגרמה -->
+    <div class="card">
+      <div class="diagram">
+
+        <!-- שכבה 1: מקור המתח (סוללה) -->
+        <div class="node power">
+          <div class="name">🔋 סוללת LiPo 3.7V</div>
+          <div class="sub">מקור אנרגיה</div>
+        </div>
+
+        <div class="connector"></div>  <!-- קו מחבר -->
+
+        <!-- שכבה 2: מודול הטעינה -->
+        <div class="node power">
+          <div class="name">⚡ TP4056</div>
+          <div class="sub">טעינה וניהול מתח</div>
+        </div>
+
+        <div class="connector"></div>
+        <div class="proto">מתח 3.3V / 5V</div>  <!-- תווית על הקו -->
+        <div class="connector"></div>
+
+        <!-- שכבה 3: הבקר המרכזי (הלב של המערכת) -->
+        <div class="node mcu">
+          <div class="name">🧠 ESP32</div>
+          <div class="sub">הבקר המרכזי – מריץ את הקוד</div>
+        </div>
+
+        <div class="connector"></div>
+
+        <!-- שכבה 4: כל מה שמחובר ישירות ל-ESP32 (ציוד היקפי) -->
+        <div class="layer">
+
+          <!-- מודול הרשת -->
+          <div class="node net">
+            <div class="name">🌐 W5500</div>
+            <div class="sub">מודול רשת Ethernet · SPI</div>
+          </div>
+
+          <!-- כרטיס SD -->
+          <div class="node net">
+            <div class="name">💾 Micro SD</div>
+            <div class="sub">אחסון מקומי (Offline) · SPI</div>
+          </div>
+
+          <!-- חיישן אור -->
+          <div class="node sensor">
+            <div class="name">💡 LDR</div>
+            <div class="sub">זיהוי פתיחת קופסה · אנלוגי</div>
+          </div>
+
+          <!-- חיישן טמפרטורה -->
+          <div class="node sensor">
+            <div class="name">🌡️ TMP36 / DHT11</div>
+            <div class="sub">ניטור טמפרטורה · אנלוגי</div>
+          </div>
+
+        </div>
+
+        <div class="connector"></div>
+        <div class="proto">כבל RJ45</div>
+        <div class="connector"></div>
+
+        <!-- שכבה 5: הרשת הארגונית (ציוד Cisco) -->
+        <div class="node net">
+          <div class="name">🔀 מתג / נתב Cisco</div>
+          <div class="sub">הרשת הארגונית הנבדקת</div>
+        </div>
+
+        <div class="connector"></div>
+        <div class="proto">אינטרנט</div>
+        <div class="connector"></div>
+
+        <!-- שכבה 6: הענן -->
+        <div class="node cloud">
+          <div class="name">☁️ Firebase</div>
+          <div class="sub">שליטה ודיווח בזמן אמת</div>
+        </div>
+
+      </div> <!-- סוף diagram -->
+    </div> <!-- סוף card -->
+
+    <!-- כרטיס מקרא הצבעים -->
+    <div class="card">
+      <h2>מקרא</h2>
+      <div class="legend">
+        <span><i style="background:#22c55e"></i> חשמל / מתח</span>
+        <span><i style="background:#38bdf8"></i> בקר / ענן</span>
+        <span><i style="background:#a78bfa"></i> רשת ותקשורת</span>
+        <span><i style="background:#f59e0b"></i> חיישנים</span>
+      </div>
+    </div>
+
+    <!-- כרטיס הסבר זרימה -->
+    <div class="card">
+      <h2>הסבר זרימה</h2>
+      <p>
+        הסוללה מספקת מתח ל-TP4056 שמנהל את הטעינה ומייצב את המתח ל-ESP32.
+        ה-ESP32 מריץ את הקוד ושולט בכל הרכיבים: הוא קורא מהחיישנים (אור וטמפרטורה),
+        שומר נתונים בכרטיס ה-SD, ומתחבר לרשת הארגונית דרך מודול ה-W5500
+        (חיבור RJ45 פיזי לציוד Cisco). משם, דרך האינטרנט, הוא מדווח בזמן אמת
+        ל-Firebase ומקבל ממנו פקודות.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer">IoT Network Tester · מסמך אפיון פרויקט (PRD) · גרסה 1.0</div>
+
+</body>
+</html>

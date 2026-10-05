@@ -1,0 +1,138 @@
+<!DOCTYPE html>                 <!-- מצהיר לדפדפן שזה מסמך HTML5 (תמיד שורה ראשונה) -->
+<html lang="he" dir="rtl">      <!-- תגית השורש. lang=he שפה עברית, dir=rtl כיוון מימין לשמאל -->
+<head>                          <!-- head = מידע על הדף (לא מוצג ישירות על המסך) -->
+  <meta charset="UTF-8">        <!-- קידוד תווים UTF-8 – חובה כדי שעברית תוצג נכון -->
+  <!-- meta viewport – גורם לאתר להיראות טוב גם בטלפון (רספונסיבי) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>התחברות – IoT Network Tester</title> <!-- הכותרת שמופיעה בלשונית הדפדפן -->
+  <link rel="stylesheet" href="style.css">    <!-- מקשר לקובץ העיצוב המשותף -->
+
+  <!-- style = בלוק עיצוב פנימי. כאן רק עיצובים ייחודיים לדף ההתחברות. -->
+  <style>
+    /* .login-wrap = עוטף את כל המסך וממרכז את תיבת ההתחברות */
+    .login-wrap {
+      min-height: 100vh;          /* גובה = כל המסך */
+      display: flex;              /* flexbox כדי למרכז */
+      align-items: center;        /* מרכוז אנכי */
+      justify-content: center;    /* מרכוז אופקי */
+      padding: 20px;              /* ריווח כדי שהתיבה לא תידבק לקצוות בטלפון */
+    }
+    /* .login-box = תיבת ההתחברות עצמה */
+    .login-box {
+      width: 100%;                      /* תופס את כל הרוחב הזמין... */
+      max-width: 380px;                 /* ...אבל לא יותר מ-380px */
+      background: var(--panel);         /* רקע כהה מהמשתנה המשותף */
+      border: 1px solid var(--border);  /* מסגרת דקה */
+      border-radius: var(--radius);     /* פינות מעוגלות */
+      padding: 32px 28px;               /* ריווח פנימי */
+      text-align: center;               /* ממרכז את התוכן בפנים */
+    }
+    /* אייקון מנעול למעלה בתיבה */
+    .login-box .lock {
+      font-size: 2.4rem;        /* גודל גדול לאימוג'י */
+      margin-bottom: 8px;       /* רווח מתחת */
+    }
+    /* כותרת בתיבת ההתחברות */
+    .login-box h1 {
+      font-size: 1.4rem;        /* גודל בינוני */
+      color: var(--accent);     /* תכלת */
+      margin-bottom: 4px;       /* רווח קטן מתחת */
+    }
+    /* טקסט הסבר קטן מתחת לכותרת */
+    .login-box .hint {
+      color: var(--muted);      /* אפור עמום */
+      font-size: 0.9rem;        /* קטן */
+      margin-bottom: 22px;      /* רווח לפני הטופס */
+    }
+    /* label = התווית מעל כל שדה */
+    .login-box label {
+      display: block;           /* שורה משל עצמה */
+      text-align: right;        /* יישור לימין */
+      font-size: 0.9rem;        /* קטן */
+      margin-bottom: 6px;       /* רווח מתחת לתווית */
+      color: var(--muted);      /* אפור */
+    }
+    /* שדות הקלט (שם משתמש / סיסמה) */
+    .login-box input {
+      width: 100%;                      /* רוחב מלא */
+      padding: 11px 14px;               /* ריווח פנימי נוח */
+      margin-bottom: 16px;              /* רווח מתחת לכל שדה */
+      background: var(--panel-2);       /* רקע כהה */
+      border: 1px solid var(--border);  /* מסגרת */
+      border-radius: 10px;              /* פינות מעוגלות */
+      color: var(--text);              /* צבע הטקסט שמקלידים */
+      font-size: 1rem;                 /* גודל פונט */
+    }
+    /* :focus = איך נראה שדה כשלוחצים עליו */
+    .login-box input:focus {
+      outline: none;                   /* מסיר את המסגרת הכחולה של הדפדפן */
+      border-color: var(--accent);     /* מסגרת תכלת כשהשדה פעיל */
+    }
+    /* כפתור/קישור הכניסה. עיצבנו קישור <a> שנראה ככפתור. */
+    .login-box .btn {
+      display: block;                  /* תופס שורה מלאה */
+      width: 100%;                     /* רוחב מלא */
+      padding: 12px;                   /* ריווח פנימי */
+      background: var(--accent);       /* רקע תכלת */
+      color: #07121f;                  /* טקסט כהה לקונטרסט */
+      text-decoration: none;           /* בלי קו תחתון */
+      font-weight: bold;               /* מודגש */
+      border-radius: 10px;             /* פינות מעוגלות */
+      margin-top: 4px;                 /* רווח קטן מעל */
+      transition: opacity 0.2s;        /* אנימציה עדינה ל-hover */
+    }
+    .login-box .btn:hover {
+      opacity: 0.85;                   /* מעט שקיפות כשעוברים עם העכבר */
+    }
+    /* הערת האבטחה בתחתית התיבה */
+    .login-box .note {
+      margin-top: 18px;                /* רווח מעל */
+      font-size: 0.78rem;              /* קטן מאוד */
+      color: var(--muted);            /* אפור */
+      line-height: 1.5;               /* ריווח שורות */
+    }
+  </style>
+</head>
+
+<body>  <!-- body = מה שבאמת מוצג על המסך -->
+
+  <!-- העוטף הממרכז -->
+  <div class="login-wrap">
+
+    <!-- תיבת ההתחברות -->
+    <div class="login-box">
+
+      <div class="lock">🔒</div>                 <!-- אייקון מנעול (אימוג'י) -->
+      <h1>IoT Network Tester</h1>                <!-- שם המערכת -->
+      <p class="hint">גישה מאובטחת – נדרשת הזדהות</p> <!-- כיתוב הסבר -->
+
+      <!-- form = טופס. action מצביע לדף שאליו "נכנסים" אחרי הלחיצה.
+           כי אין JS, הטופס לא בודק באמת סיסמה – הכפתור פשוט מעביר לדף הבית. -->
+      <form action="overview.html" method="get">
+
+        <label for="user">שם משתמש</label>        <!-- תווית לשדה המשתמש -->
+        <!-- שדה טקסט. required = הדפדפן לא יתן לשלוח ריק. -->
+        <input type="text" id="user" name="user" placeholder="admin" required>
+
+        <label for="pass">סיסמה</label>           <!-- תווית לשדה הסיסמה -->
+        <!-- type=password מסתיר את התווים בכוכביות -->
+        <input type="password" id="pass" name="pass" placeholder="••••••••" required>
+
+        <!-- הכפתור: עיצבנו קישור שמוביל לדף הבית.
+             (בטופס אמיתי זה היה <button type="submit"> שנבדק בשרת) -->
+        <a href="overview.html" class="btn">כניסה למערכת →</a>
+
+      </form>
+
+      <!-- הערת אבטחה כנה – חשוב שתבין את זה: -->
+      <p class="note">
+        שים לב: זהו מסך התחברות <b>ויזואלי בלבד</b>. ללא JavaScript ושרת
+        אי אפשר לבדוק סיסמה או להגן באמת על הגישה – כל אחד שילחץ "כניסה" ייכנס.
+        לאבטחה אמיתית צריך שרת שמאמת משתמשים.
+      </p>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>רכיבים – IoT Network Tester</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- סרגל ניווט -->
+  <nav class="navbar">
+    <div class="logo"><span class="dot"></span> IoT Network Tester</div>
+    <div class="links">
+      <a href="overview.html">מה הפרויקט עושה</a>
+      <a href="topology.html">טופולוגיה</a>
+      <a href="specs.html">תקינות ומפרט</a>
+      <a href="components.html" class="active">רכיבים</a>  <!-- דף נוכחי -->
+      <a href="login.html">יציאה</a>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <h1 class="page-title">רכיבי חומרה</h1>
+    <p class="page-subtitle">
+      שמונה הרכיבים שמרכיבים את המכשיר – מה התפקיד של כל אחד וכיצד הוא עובד.
+    </p>
+
+    <!-- רשת כרטיסים: כרטיס לכל רכיב -->
+    <div class="grid">
+
+      <!-- רכיב 1 -->
+      <div class="card">
+        <h2>1. ESP32</h2>
+        <p><b>תפקיד:</b> המוח המרכזי – מריץ את הקוד ומנהל את כל הרכיבים.</p>
+        <p><b>עיקרון:</b> מיקרו-בקר דו-ליבתי 240MHz עם Wi-Fi ו-Bluetooth.</p>
+        <span class="badge info">מיקרו-בקר</span>
+      </div>
+
+      <!-- רכיב 2 -->
+      <div class="card">
+        <h2>2. W5500</h2>
+        <p><b>תפקיד:</b> חיבור קווי (RJ45) לרשת הארגונית של Cisco, ללא Wi-Fi.</p>
+        <p><b>עיקרון:</b> בקר רשת עם Hardwired TCP/IP Stack – מוריד עומס מה-ESP32.</p>
+        <span class="badge info">רשת Ethernet · SPI</span>
+      </div>
+
+      <!-- רכיב 3 -->
+      <div class="card">
+        <h2>3. Micro SD Reader</h2>
+        <p><b>תפקיד:</b> אחסון מקומי של לוגים ונתוני תעבורה (Offline Buffering).</p>
+        <p><b>עיקרון:</b> קורא כרטיסי SD במערכת קבצים FAT16/FAT32 דרך SPI.</p>
+        <span class="badge info">אחסון · SPI</span>
+      </div>
+
+      <!-- רכיב 4 -->
+      <div class="card">
+        <h2>4. LDR</h2>
+        <p><b>תפקיד:</b> זיהוי פתיחת הקופסה (Tamper Detection) ע"י שינוי באור.</p>
+        <p><b>עיקרון:</b> נגד שההתנגדות שלו יורדת כשמאיר עליו אור (Cadmium Sulfide).</p>
+        <span class="badge warn">חיישן אור · אנלוגי</span>
+      </div>
+
+      <!-- רכיב 5 -->
+      <div class="card">
+        <h2>5. TMP36 / DHT11</h2>
+        <p><b>תפקיד:</b> ניטור טמפרטורה – לזהות חום חריג (למשל עומס/חימום יתר).</p>
+        <p><b>עיקרון:</b> TMP36 מוציא מתח אנלוגי לפי הטמפרטורה; DHT11 דיגיטלי.</p>
+        <span class="badge warn">חיישן טמפ' · אנלוגי</span>
+      </div>
+
+      <!-- רכיב 6 -->
+      <div class="card">
+        <h2>6. TP4056</h2>
+        <p><b>תפקיד:</b> ניהול הטענה ואספקת חשמל רציפה למכשיר.</p>
+        <p><b>עיקרון:</b> טעינה בשיטת CC/CV עם מעגל הגנה (DW01A) מפני פריקת יתר.</p>
+        <span class="badge ok">מודול טעינה</span>
+      </div>
+
+      <!-- רכיב 7 -->
+      <div class="card">
+        <h2>7. סוללת LiPo 3.7V</h2>
+        <p><b>תפקיד:</b> מקור אנרגיה שמאפשר למכשיר לפעול גם בניתוק מהחשמל.</p>
+        <p><b>עיקרון:</b> תא ליתיום-פולימר נטען, מתח נומינלי 3.7V (מלא 4.2V).</p>
+        <span class="badge ok">סוללה</span>
+      </div>
+
+      <!-- רכיב 8 (חיבור ברשת) -->
+      <div class="card">
+        <h2>8. ציוד רשת Cisco</h2>
+        <p><b>תפקיד:</b> הרשת הארגונית הנבדקת – היעד של הסריקות והבדיקות.</p>
+        <p><b>עיקרון:</b> מתג/נתב שאליו המכשיר מתחבר פיזית דרך כבל RJ45.</p>
+        <span class="badge info">יעד הבדיקה</span>
+      </div>
+
+    </div> <!-- סוף grid -->
+
+  </div>
+
+  <div class="footer">IoT Network Tester · מסמך אפיון פרויקט (PRD) · גרסה 1.0</div>
+
+</body>
+</html>
